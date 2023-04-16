@@ -1,9 +1,13 @@
 #pragma once
-#include <memory>
+#include <unordered_map>
 #include <muduo/net/TcpConnection.h>
 #include <muduo/net/TcpServer.h>
 #include <muduo/net/EventLoop.h>
 #include <muduo/net/InetAddress.h>
+#include <string>
+#include <iostream>
+#include <functional>
+#include <google/protobuf/descriptor.h>
 #include "google/protobuf/service.h"
 
 // 框架提供的专门服务发布rpc服务的网络对象类
@@ -18,11 +22,20 @@ private:
     void onMessage(const muduo::net::TcpConnectionPtr &,
                    muduo::net::Buffer *,
                    muduo::Timestamp);
+    // 服务类型信息
+    struct ServiceInfo
+    {
+        // 保存服务对象
+        google::protobuf::Service *_service;
+        // 保存服务对象方法
+        std::unordered_map<std::string, const google::protobuf::MethodDescriptor *> _methodMap;
+    };
+    // 存储注册成功的服务对象和其服务方法的所有信息
+    std::unordered_map<std::string, ServiceInfo> _serviceMap;
 
 public:
     // 这里是框架提供给外部使用的，可以发布rpc方法的函数接口
-    void
-    NotifyService(google::protobuf::Service *service);
+    void NotifyService(google::protobuf::Service *service);
     // 启动rpc服务节点，开始提供rpc远程网络调用服务
     void Run();
 };
