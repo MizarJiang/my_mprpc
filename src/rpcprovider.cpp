@@ -1,10 +1,25 @@
 #include "rpcprovider.h"
-#include <string>
-#include <iostream>
-#include <functional>
 #include "mprpcapplication.h"
+
 void RpcProvider::NotifyService(google::protobuf::Service *service)
 {
+    ServiceInfo service_info;
+    const google::protobuf::ServiceDescriptor *pserviceDesc = service->GetDescriptor();
+    // 获取服务的名字
+    std::string service_name = pserviceDesc->name();
+    // 获取服务对象service的方法数量
+    int method_count = pserviceDesc->method_count();
+    std::cout << "service name: " << service_name << std::endl;
+    for (int i = 0; i < method_count; i++)
+    {
+        // 获取了服务对象指定下标的服务方法的描述（抽象描述）
+        const google::protobuf::MethodDescriptor *pMethodDesc = pserviceDesc->method(i);
+        std::string methodName = pMethodDesc->name();
+        service_info._methodMap.insert({methodName, pMethodDesc});
+        std::cout << "method name: " << methodName << std::endl;
+    }
+    service_info._service = service;
+    _serviceMap.insert({service_name, service_info});
 }
 // 启动rpc服务节点，开始提供rpc远程网络调用服务
 void RpcProvider::Run()
@@ -38,8 +53,8 @@ void RpcProvider::onConnetction(const muduo::net::TcpConnectionPtr &conn)
 {
 }
 
-void RpcProvider::onMessage(const muduo::net::TcpConnectionPtr &,
-                            muduo::net::Buffer *,
-                            muduo::Timestamp)
+void RpcProvider::onMessage(const muduo::net::TcpConnectionPtr &conn,
+                            muduo::net::Buffer *buff,
+                            muduo::Timestamp time)
 {
 }
