@@ -44,7 +44,7 @@ public:
         done->Run();
     }
 };
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
     // 调用框架的初始化操作
     MprpcApplication::Init(argc, argv);

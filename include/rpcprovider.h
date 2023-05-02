@@ -32,6 +32,8 @@ private:
     };
     // 存储注册成功的服务对象和其服务方法的所有信息
     std::unordered_map<std::string, ServiceInfo> _serviceMap;
+    // Closure的回调操作，用于序列化rpc的响应和网络发送
+    void SendRpcResponse(const muduo::net::TcpConnectionPtr &, google::protobuf::Message *);
 
 public:
     // 这里是框架提供给外部使用的，可以发布rpc方法的函数接口

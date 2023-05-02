@@ -14,6 +14,6 @@ private:
 
 public:
     static MprpcApplication &GetInstance();
-    static void Init(int argc, char *argv[]);
+    static void Init(int argc, char **argv);
     static MprpcConfig &getConfig();
 };

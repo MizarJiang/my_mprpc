@@ -15,7 +15,7 @@ MprpcApplication &MprpcApplication::GetInstance()
     static MprpcApplication temp;
     return temp;
 }
-void MprpcApplication::Init(int argc, char *argv[])
+void MprpcApplication::Init(int argc, char **argv)
 {
     if (argc < 2)
     {
