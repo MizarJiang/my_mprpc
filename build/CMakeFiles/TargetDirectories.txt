@@ -1,0 +1,13 @@
+/home/a/C++PLUS/mprpc/build/CMakeFiles/rebuild_cache.dir
+/home/a/C++PLUS/mprpc/build/CMakeFiles/edit_cache.dir
+/home/a/C++PLUS/mprpc/build/src/CMakeFiles/rebuild_cache.dir
+/home/a/C++PLUS/mprpc/build/src/CMakeFiles/mprpc.dir
+/home/a/C++PLUS/mprpc/build/src/CMakeFiles/edit_cache.dir
+/home/a/C++PLUS/mprpc/build/example/CMakeFiles/rebuild_cache.dir
+/home/a/C++PLUS/mprpc/build/example/CMakeFiles/edit_cache.dir
+/home/a/C++PLUS/mprpc/build/example/callee/CMakeFiles/rebuild_cache.dir
+/home/a/C++PLUS/mprpc/build/example/callee/CMakeFiles/provider.dir
+/home/a/C++PLUS/mprpc/build/example/callee/CMakeFiles/edit_cache.dir
+/home/a/C++PLUS/mprpc/build/example/caller/CMakeFiles/rebuild_cache.dir
+/home/a/C++PLUS/mprpc/build/example/caller/CMakeFiles/consumer.dir
+/home/a/C++PLUS/mprpc/build/example/caller/CMakeFiles/edit_cache.dir

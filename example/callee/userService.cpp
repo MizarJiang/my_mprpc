@@ -21,6 +21,12 @@ public:
         cout << "name: " << name << " pwd: " << pwd << endl;
         return true;
     }
+    bool Register(uint32_t id, string name, string pwd)
+    {
+        cout << "doing local service :Register " << endl;
+        cout << "id: " << id << "name: " << name << " pwd: " << pwd << endl;
+        return true;
+    }
     // 重写基类UserServiceRpc的虚函数，下面的这些方法都是直接调用rpc的框架
     void Login(::google::protobuf::RpcController *controller,
                const ::fixbug::LoginRequest *request,
@@ -39,6 +45,28 @@ public:
         code->set_errcode(0);
         code->set_errrmsg("");
         response->set_sucess(login_res);
+
+        // 执行回调操作 执行响应对象数据的序列化和网络发送（框架完成）
+        done->Run();
+    }
+    void Register(::google::protobuf::RpcController *controller,
+                  const ::fixbug::RegisterRequest *request,
+                  ::fixbug::RegisterResponse *response,
+                  ::google::protobuf::Closure *done)
+    {
+        // 框架给业务上报了请求参数LoginRequest，应用获取相应数据做本地业务
+        uint32_t id = request->id();
+        string name = request->name();
+        string pwd = request->pwd();
+
+        // 执行本地业务
+        bool register_res = Register(id, name, pwd);
+
+        // 把响应写入调用方response
+        ResultCode *code = response->mutable_result();
+        code->set_errcode(0);
+        code->set_errrmsg("");
+        response->set_sucess(register_res);
 
         // 执行回调操作 执行响应对象数据的序列化和网络发送（框架完成）
         done->Run();
