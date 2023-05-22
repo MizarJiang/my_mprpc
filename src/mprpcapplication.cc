@@ -1,4 +1,5 @@
 #include "mprpcapplication.h"
+#include "logger.h"
 #include <iostream>
 #include <unistd.h>
 
@@ -46,10 +47,14 @@ void MprpcApplication::Init(int argc, char **argv)
     // rpcserver_ip=   rpcserver_port=   zookeeper_ip=  zookeeper_port=
     _config.LoadConfigFile(config_file.c_str());
 
-    cout << "rpcserver_ip: " << _config.Load("rpcserver_ip") << endl;
-    cout << "rpcserver_port: " << _config.Load("rpcserver_port") << endl;
-    cout << "zookeeper_ip: " << _config.Load("zookeeper_ip") << endl;
-    cout << "zookeeper_port: " << _config.Load("zookeeper_port") << endl;
+    LOG_INFO("rpcserver_ip: %s",_config.Load("rpcserver_ip").c_str());
+    LOG_INFO("rpcserver_port: %s",_config.Load("rpcserver_port").c_str());
+    LOG_INFO("zookeeper_ip: %s",_config.Load("zookeeper_ip").c_str());
+    LOG_INFO("zookeeper_port: %s",_config.Load("zookeeper_port").c_str());
+    // cout << "rpcserver_ip: " << _config.Load("rpcserver_ip") << endl;
+    // cout << "rpcserver_port: " << _config.Load("rpcserver_port") << endl;
+    // cout << "zookeeper_ip: " << _config.Load("zookeeper_ip") << endl;
+    // cout << "zookeeper_port: " << _config.Load("zookeeper_port") << endl;
 }
 
 MprpcConfig &MprpcApplication::getConfig()

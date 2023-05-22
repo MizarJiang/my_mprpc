@@ -1,6 +1,8 @@
 #include "mprpcchannel.h"
 #include "rpcheader.pb.h"
 #include "mprpcapplication.h"
+#include "mprpccontroller.h"
+
 #include <string>
 #include <iostream>
 #include <unistd.h>
@@ -16,6 +18,7 @@ void MprpcChannel::CallMethod(const google::protobuf::MethodDescriptor *method,
                               google::protobuf::Message *response,
                               google::protobuf::Closure *done)
 {
+
     const google::protobuf::ServiceDescriptor *sd = method->service();
     std::string service_name = sd->name();    // service_name
     std::string method_name = method->name(); // method_name
@@ -29,7 +32,7 @@ void MprpcChannel::CallMethod(const google::protobuf::MethodDescriptor *method,
     }
     else
     {
-        std::cout << "request Serialize To String fail" << std::endl;
+        controller->SetFailed("request Serialize To String fail");
         return;
     }
 
@@ -47,7 +50,7 @@ void MprpcChannel::CallMethod(const google::protobuf::MethodDescriptor *method,
     }
     else
     {
-        std::cout << "rpcHeader Serialize To String fail" << std::endl;
+        controller->SetFailed("rpcHeader Serialize To String fail");
         return;
     }
 
@@ -80,8 +83,8 @@ void MprpcChannel::CallMethod(const google::protobuf::MethodDescriptor *method,
     // int clientfd = socket(AF_INET, SOCK_STREAM, 0);
     if (clientfd == -1)
     {
-        std::cout << "create socket error! errno:" << errno << std::endl;
-
+        std::string errstr="create socket error! errno: " + std::to_string(errno);
+        controller->SetFailed(errstr);
         exit(EXIT_FAILURE);
     }
 
@@ -95,14 +98,16 @@ void MprpcChannel::CallMethod(const google::protobuf::MethodDescriptor *method,
     // 发起连接
     if (-1 == connect(clientfd, (struct sockaddr *)&server_addr, sizeof(server_addr)))
     {
-        std::cout << "connect error! errno: " << errno << std::endl;
+        std::string errstr="connect error! errno: " + std::to_string(errno);
+        controller->SetFailed(errstr);
         close(clientfd);
         exit(EXIT_FAILURE);
     }
     // 发送rpc请求
     if (-1 == send(clientfd, send_rpc_str.c_str(), send_rpc_str.size(), 0))
     {
-        std::cout << "send error! errno: " << errno << std::endl;
+        std::string errstr="send error! errno: " + std::to_string(errno);
+        controller->SetFailed(errstr);
         close(clientfd);
         return;
     }
@@ -111,7 +116,8 @@ void MprpcChannel::CallMethod(const google::protobuf::MethodDescriptor *method,
     int recv_size = 0;
     if (-1 == (recv_size = recv(clientfd, recv_buf, 1024, 0)))
     {
-        std::cout << "recv error! errno: " << errno << std::endl;
+        std::string errstr="recv error! errno: " + std::to_string(errno);
+        controller->SetFailed(errstr);
         close(clientfd);
         return;
     }
@@ -119,7 +125,8 @@ void MprpcChannel::CallMethod(const google::protobuf::MethodDescriptor *method,
     std::string response_str(recv_buf, 0, recv_size);
     if (!response->ParseFromArray(recv_buf, recv_size))
     {
-        std::cout << "parse arroe! response_str: " << recv_buf << std::endl;
+        std::string errstr="parse arroe! response_str: " + std::string(recv_buf, 0, recv_size);
+        controller->SetFailed(errstr);
         close(clientfd);
         return;
     }

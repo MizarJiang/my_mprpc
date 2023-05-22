@@ -1,0 +1,8 @@
+first log message! 10:56:53  INFO
+first log message! 10:56:56  INFO
+first log message! 10:58:35  ERROR
+/home/a/C++PLUS/mprpc/example/callee/friendService.cpp:main:52 10:58:35  ERROR
+rpcserver_ip: 127.0.0.1 11:9:25  INFO
+rpcserver_port: 8000 11:9:25  INFO
+zookeeper_ip: 127.0.0.1 11:9:25  INFO
+zookeeper_port: 9000 11:9:25  INFO
